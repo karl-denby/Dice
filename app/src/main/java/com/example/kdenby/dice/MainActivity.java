@@ -29,8 +29,12 @@ public class MainActivity extends AppCompatActivity {
         // 1. Randomly select a number between 1 + 6
         // 2. Set the dice image to the corresponding number
         // 3. Return the number so the program knows
+        int result;
+        Random die;
 
-        return 6;
+        die = new Random();
+        result = die.nextInt(6) + 1;
+        return result;
     }
 
     private void setupWidgets () {
