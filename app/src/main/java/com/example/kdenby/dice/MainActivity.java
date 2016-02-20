@@ -70,8 +70,32 @@ public class MainActivity extends AppCompatActivity {
         imgDieTwo = (ImageView)findViewById(R.id.imgDieTwo);
         txtResult = (TextView)findViewById(R.id.txtResult);
 
+        imgDieOne.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int result;
+
+                result = setupDie(imgDieOne);
+                result -= 1;
+
+                System.out.print(result);
+            }
+        });
+
+        imgDieTwo.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int result;
+
+                result = setupDie(imgDieTwo);
+                result -= 1;
+
+                System.out.print(result);
+            }
+        });
+
+
         // Create some code for when the roll button is clicked
-        //  We should move this out somewhere else later.
         bRoll.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

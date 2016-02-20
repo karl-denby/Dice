@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Dice</string>
+
+    <string name="Roll">Roll</string>
+    <string name="Result">Result: 3</string>
+    <string name="leftDie">Left Dice</string>
+    <string name="rightDie">Right Dice</string>
+</resources>
