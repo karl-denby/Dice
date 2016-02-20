@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         bRoll.callOnClick();    // Roll the dice so we don't start with 12 :)
     }
 
-    private int setupDieOne () {
+    private int setupDie (ImageView imgDie) {
         // Write code here to do the following
         // 1. Randomly select a number between 1 + 6
         // 2. Set the dice image to the corresponding number
@@ -32,8 +32,34 @@ public class MainActivity extends AppCompatActivity {
         int result;
         Random die;
 
+        // Randomly select a number
         die = new Random();
         result = die.nextInt(6) + 1;
+
+        // Set the dice image
+        System.out.println("die is: " + result);
+        switch (result) {
+            case 1:
+                imgDie.setImageResource(R.drawable.die1);
+                break;
+            case 2:
+                imgDie.setImageResource(R.drawable.die2);
+                break;
+            case 3:
+                imgDie.setImageResource(R.drawable.die3);
+                break;
+            case 4:
+                imgDie.setImageResource(R.drawable.die4);
+                break;
+            case 5:
+                imgDie.setImageResource(R.drawable.die5);
+                break;
+            case 6:
+                imgDie.setImageResource(R.drawable.die6);
+                break;
+        }
+
+        // Return the result
         return result;
     }
 
