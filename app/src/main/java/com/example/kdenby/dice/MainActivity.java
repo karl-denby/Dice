@@ -70,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
         imgDieTwo = (ImageView)findViewById(R.id.imgDieTwo);
         txtResult = (TextView)findViewById(R.id.txtResult);
 
+
+        // create some code for when the user clicks on some of these widgets
+        // -- Dice 1
         imgDieOne.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // -- Dice 2
         imgDieTwo.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,71 +98,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        // Create some code for when the roll button is clicked
+        // -- Roll button
         bRoll.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Declare some variables and initialize them
                 int result1, result2, total;
-                Random die1, die2;
-
-                die1 = new Random();
-                die2 = new Random();
 
                 // Get 2 randoms between 0 and 5, then add 1 to each
-                result1 = die1.nextInt(6) + 1;
-                result2 = die2.nextInt(6) + 1;
+                result1 = setupDie(imgDieOne);
+                result2 = setupDie(imgDieTwo);
 
                 // Calculate total and update txtResult.text
                 total = result1 + result2;
                 txtResult.setText("Result is: " + total);
-
-                // Update die1
-                System.out.println("die 1 is: " + result1);
-                switch (result1) {
-                    case 1:
-                        imgDieOne.setImageResource(R.drawable.die1);
-                        break;
-                    case 2:
-                        imgDieOne.setImageResource(R.drawable.die2);
-                        break;
-                    case 3:
-                        imgDieOne.setImageResource(R.drawable.die3);
-                        break;
-                    case 4:
-                        imgDieOne.setImageResource(R.drawable.die4);
-                        break;
-                    case 5:
-                        imgDieOne.setImageResource(R.drawable.die5);
-                        break;
-                    case 6:
-                        imgDieOne.setImageResource(R.drawable.die6);
-                        break;
-                }
-
-                System.out.println("die 2 is: " + result2);
-                // Update die2
-                switch (result2) {
-                    case 1:
-                        imgDieTwo.setImageResource(R.drawable.die1);
-                        break;
-                    case 2:
-                        imgDieTwo.setImageResource(R.drawable.die2);
-                        break;
-                    case 3:
-                        imgDieTwo.setImageResource(R.drawable.die3);
-                        break;
-                    case 4:
-                        imgDieTwo.setImageResource(R.drawable.die4);
-                        break;
-                    case 5:
-                        imgDieTwo.setImageResource(R.drawable.die5);
-                        break;
-                    case 6:
-                        imgDieTwo.setImageResource(R.drawable.die6);
-                        break;
-                }
             }
         });
     }
