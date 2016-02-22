@@ -23,8 +23,11 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("Create!");
         setContentView(R.layout.activity_main);
 
-        setupWidgets();         // Call our super function that gets us going
-        bRoll.callOnClick();    // Roll the dice so we don't start with 12 :)
+        // This is an attempt to only create everything once
+        if (savedInstanceState == null) {
+            setupWidgets();         // Call our super function that gets us going
+            bRoll.callOnClick();    // Roll the dice so we don't start with 12 :)
+        }
     }
 
     @Override
@@ -51,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private int setupDie (ImageView imgDie) {
+    private int setupDie (ImageView imgDie, int DieValue) {
         // Write code here to do the following
         // 1. Randomly select a number between 1 + 6
         // 2. Set the dice image to the corresponding number
@@ -60,8 +63,12 @@ public class MainActivity extends AppCompatActivity {
         Random die;
 
         // Randomly select a number
-        die = new Random();
-        result = die.nextInt(6) + 1;
+        if (DieValue == 0) {
+            die = new Random();
+            result = die.nextInt(6) + 1;
+        } else {
+            result = DieValue;
+        }
 
         // Set the dice image
         System.out.println("die is: " + result);
@@ -105,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int result;
 
-                result = setupDie(imgDieOne);
+                result = setupDie(imgDieOne, 0);
                 result -= 1;
 
             }
@@ -117,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int result;
 
-                result = setupDie(imgDieTwo);
+                result = setupDie(imgDieTwo, 6);
                 result -= 1;
 
             }
@@ -131,8 +138,8 @@ public class MainActivity extends AppCompatActivity {
                 int result1, result2, total;
 
                 // Get 2 randoms between 0 and 5, then add 1 to each
-                result1 = setupDie(imgDieOne);
-                result2 = setupDie(imgDieTwo);
+                result1 = setupDie(imgDieOne, 0);
+                result2 = setupDie(imgDieTwo, 0);
 
                 // Calculate total and update txtResult.text
                 total = result1 + result2;
@@ -140,6 +147,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }
