@@ -15,13 +15,21 @@ public class MainActivity extends AppCompatActivity {
     Button bRoll;
     ImageView imgDieOne, imgDieTwo;
     TextView txtResult;
+    boolean running = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setupWidgets();         // Call our super function that gets us going
-        bRoll.callOnClick();    // Roll the dice so we don't start with 12 :)
+
+        if (!running){
+            System.out.print("Not running, calling Setup functions");
+            setupWidgets();         // Call our super function that gets us going
+            bRoll.callOnClick();    // Roll the dice so we don't start with 12 :)
+
+            System.out.print("Setting running to true");
+            running = true;
+        }
     }
 
     private int setupDie (ImageView imgDie) {
