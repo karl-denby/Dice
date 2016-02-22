@@ -19,12 +19,37 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        System.out.println("Create!");
         setContentView(R.layout.activity_main);
 
-        System.out.print("Not running, calling Setup functions");
         setupWidgets();         // Call our super function that gets us going
         bRoll.callOnClick();    // Roll the dice so we don't start with 12 :)
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        System.out.println("Resumed!");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // We should have code here that drops usage of things like cameras and sensors
+        // Nothing to heavy though as we will still be visible
+
+        System.out.println("Paused!");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // We should have teardown code here, the heavy stuff including writing to storage
+
+        System.out.println("Stopped!");
+    }
+
 
     private int setupDie (ImageView imgDie) {
         // Write code here to do the following
@@ -83,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
                 result = setupDie(imgDieOne);
                 result -= 1;
 
-                System.out.print(result);
             }
         });
 
@@ -96,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
                 result = setupDie(imgDieTwo);
                 result -= 1;
 
-                System.out.print(result);
             }
         });
 
