@@ -15,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
     Button bRoll;
     ImageView imgDieOne, imgDieTwo;
     TextView txtResult;
+    int die1 = 1;
+    int die2 = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,25 +36,32 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         System.out.println("Resumed!");
+
+        setupWidgets();         // attached activity elements to callbacks
+
+        // Load saved values???
+
+        // Set dice to saved values
+        setupDie(imgDieOne, 4);
+        setupDie(imgDieTwo, 4);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        System.out.println("Paused!");
         // We should have code here that drops usage of things like cameras and sensors
         // Nothing to heavy though as we will still be visible
 
-        System.out.println("Paused!");
+        // Save the dice values
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        // We should have teardown code here, the heavy stuff including writing to storage
-
         System.out.println("Stopped!");
+        // We should have teardown code here, the heavy stuff including writing to storage
     }
-
 
     private int setupDie (ImageView imgDie, int DieValue) {
         // Write code here to do the following
@@ -103,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
         imgDieOne = (ImageView)findViewById(R.id.imgDieOne);
         imgDieTwo = (ImageView)findViewById(R.id.imgDieTwo);
         txtResult = (TextView)findViewById(R.id.txtResult);
-
 
         // create some code for when the user clicks on some of these widgets
         // -- Dice 1
