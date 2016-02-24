@@ -5,4 +5,5 @@
     <string name="Result">Result: 3</string>
     <string name="leftDie">Left Dice</string>
     <string name="rightDie">Right Dice</string>
+    <string name="dice_save">dice_save</string>
 </resources>

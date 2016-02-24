@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.Random;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     TextView txtResult;
     int die1 = 1;
     int die2 = 2;
+    Context context = MainActivity.this;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,13 @@ public class MainActivity extends AppCompatActivity {
         // Nothing to heavy though as we will still be visible
 
         // Save the dice values
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                getString(R.string.dice_save), Context.MODE_PRIVATE
+        );
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("die1", die1);
+        editor.putInt("die2", die2);
+        editor.apply();
     }
 
     @Override
