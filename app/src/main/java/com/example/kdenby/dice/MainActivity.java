@@ -14,14 +14,16 @@ import android.content.SharedPreferences;
 
 public class MainActivity extends AppCompatActivity {
 
+    // For Save/Load
+    Context context = MainActivity.this;
+
+    // Variable for widget references
     Button bRoll;
     ImageView imgDieOne, imgDieTwo;
     TextView txtResult;
-    int die1 = 0;
-    int die2 = 0;
-    int total = 0;
-    Context context = MainActivity.this;
 
+    // Variables for game mechanics
+    int die1, die2, total = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +35,10 @@ public class MainActivity extends AppCompatActivity {
         // This is an attempt to only create everything once
         if (savedInstanceState == null) {
             setupWidgets();         // Call our super function that gets us going
-            if (die1 == 0) {
-                System.out.println("Create: Dice1 value is >> " + die1);
-                bRoll.callOnClick();    // Roll the dice so we don't start with 12 :)
+            if (total == 0) {
+                System.out.println("Create: total is >> " + total);
+                bRoll.callOnClick();    // Roll the dice so we don't start with 0 :)
+                txtResult.setText("Result is: " + total);
             }
         }
     }
@@ -43,9 +46,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        int saved1, saved2;
-
-        System.out.println("Resumed!");
 
         setupWidgets();         // attached activity elements to callbacks
 
@@ -53,16 +53,16 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = context.getSharedPreferences(
                 getString(R.string.dice_save), Context.MODE_PRIVATE
         );
-        saved1 = sharedPref.getInt("die1", 0);
-        saved2 = sharedPref.getInt("die2", 0);
-        System.out.println("Loaded values are: " + saved1 + " " + saved2);
+        die1 = sharedPref.getInt("die1", 0);
+        die2 = sharedPref.getInt("die2", 0);
+        System.out.println("Loaded values are: " + die1 + " " + die2);
 
         // Set dice to saved values
-        setupDie(imgDieOne, saved1);
-        setupDie(imgDieTwo, saved2);
+        setupDie(imgDieOne, die1);
+        setupDie(imgDieTwo, die2);
 
         // Calculate total and update txtResult.text
-        total = saved1 + saved2;
+        total = die1 + die2;
         txtResult.setText("Result is: " + total);
     }
 
@@ -77,11 +77,11 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = context.getSharedPreferences(
                 getString(R.string.dice_save), Context.MODE_PRIVATE
         );
-
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("die1", die1);
         editor.putInt("die2", die2);
         editor.apply();
+
         System.out.println("Saved values are: " + die1 + " " + die2);
     }
 
@@ -149,7 +149,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int result;
 
-                result = setupDie(imgDieOne, 0);
+                result = setupDie(imgDieOne, 6);
+                die1 = 6;
+                total = die1 + die2;
+                txtResult.setText("Result is: " + total);
+
                 result -= 1;
             }
         });
@@ -161,6 +165,10 @@ public class MainActivity extends AppCompatActivity {
                 int result;
 
                 result = setupDie(imgDieTwo, 6);
+                die2 = 6;
+                total = die1 + die2;
+                txtResult.setText("Result is: " + total);
+
                 result -= 1;
             }
         });
@@ -170,19 +178,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Declare some variables and initialize them
-                int result1, result2, total;
 
                 // Get 2 randoms between 0 and 5, then add 1 to each
-                result1 = setupDie(imgDieOne, 0);
-                result2 = setupDie(imgDieTwo, 0);
+                die1 = setupDie(imgDieOne, 0);
+                die2 = setupDie(imgDieTwo, 0);
 
                 // Calculate total and update txtResult.text
-                total = result1 + result2;
+                total = die1 + die2;
                 txtResult.setText("Result is: " + total);
-
-                die1 = result1;
-                die2 = result2;
-                total = result1 + result2;
             }
         });
     }
