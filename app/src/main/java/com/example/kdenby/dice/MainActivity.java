@@ -17,8 +17,9 @@ public class MainActivity extends AppCompatActivity {
     Button bRoll;
     ImageView imgDieOne, imgDieTwo;
     TextView txtResult;
-    int die1 = 1;
-    int die2 = 2;
+    int die1 = 0;
+    int die2 = 0;
+    int total = 0;
     Context context = MainActivity.this;
 
 
@@ -32,22 +33,37 @@ public class MainActivity extends AppCompatActivity {
         // This is an attempt to only create everything once
         if (savedInstanceState == null) {
             setupWidgets();         // Call our super function that gets us going
-            bRoll.callOnClick();    // Roll the dice so we don't start with 12 :)
+            if (die1 == 0) {
+                System.out.println("Create: Dice1 value is >> " + die1);
+                bRoll.callOnClick();    // Roll the dice so we don't start with 12 :)
+            }
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        int saved1, saved2;
+
         System.out.println("Resumed!");
 
         setupWidgets();         // attached activity elements to callbacks
 
         // Load saved values???
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                getString(R.string.dice_save), Context.MODE_PRIVATE
+        );
+        saved1 = sharedPref.getInt("die1", 0);
+        saved2 = sharedPref.getInt("die2", 0);
+        System.out.println("Loaded values are: " + saved1 + " " + saved2);
 
         // Set dice to saved values
-        setupDie(imgDieOne, 4);
-        setupDie(imgDieTwo, 4);
+        setupDie(imgDieOne, saved1);
+        setupDie(imgDieTwo, saved2);
+
+        // Calculate total and update txtResult.text
+        total = saved1 + saved2;
+        txtResult.setText("Result is: " + total);
     }
 
     @Override
@@ -61,10 +77,12 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = context.getSharedPreferences(
                 getString(R.string.dice_save), Context.MODE_PRIVATE
         );
+
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("die1", die1);
         editor.putInt("die2", die2);
         editor.apply();
+        System.out.println("Saved values are: " + die1 + " " + die2);
     }
 
     @Override
@@ -133,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
 
                 result = setupDie(imgDieOne, 0);
                 result -= 1;
-
             }
         });
 
@@ -145,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
 
                 result = setupDie(imgDieTwo, 6);
                 result -= 1;
-
             }
         });
 
@@ -163,6 +179,10 @@ public class MainActivity extends AppCompatActivity {
                 // Calculate total and update txtResult.text
                 total = result1 + result2;
                 txtResult.setText("Result is: " + total);
+
+                die1 = result1;
+                die2 = result2;
+                total = result1 + result2;
             }
         });
     }
