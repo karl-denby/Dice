@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         // This is an attempt to only create everything once
         if (savedInstanceState == null) {
             setupWidgets();         // Call our super function that gets us going
+            txtResult.setText("Result is: " + total);
+
             if (total == 0) {
                 System.out.println("Create: total is >> " + total);
                 bRoll.callOnClick();    // Roll the dice so we don't start with 0 :)
