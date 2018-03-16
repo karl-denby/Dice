@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.kdenby.dice">
+    package="com.karldenby.dice">
 
     <application
         android:allowBackup="true"

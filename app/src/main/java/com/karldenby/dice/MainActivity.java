@@ -1,4 +1,4 @@
-package com.example.kdenby.dice;
+package com.karldenby.dice;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
