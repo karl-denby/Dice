@@ -28,8 +28,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        System.out.println("Create!");
         setContentView(R.layout.activity_main);
 
         // This is an attempt to only create everything once
@@ -38,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
             txtResult.setText("Result is: " + total);
 
             if (total == 0) {
-                System.out.println("Create: total is >> " + total);
                 bRoll.callOnClick();    // Roll the dice so we don't start with 0 :)
                 txtResult.setText("Result is: " + total);
             }
@@ -57,11 +54,10 @@ public class MainActivity extends AppCompatActivity {
         );
         die1 = sharedPref.getInt("die1", 0);
         die2 = sharedPref.getInt("die2", 0);
-        System.out.println("Loaded values are: " + die1 + " " + die2);
 
-        // Set dice to saved values
-        setupDie(imgDieOne, die1);
-        setupDie(imgDieTwo, die2);
+        // Set dice to saved values or new values if they where blank
+        die1 = setupDie(imgDieOne, die1);
+        die2 = setupDie(imgDieTwo, die2);
 
         // Calculate total and update txtResult.text
         total = die1 + die2;
@@ -71,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        System.out.println("Paused!");
         // We should have code here that drops usage of things like cameras and sensors
         // Nothing to heavy though as we will still be visible
 
@@ -83,14 +78,11 @@ public class MainActivity extends AppCompatActivity {
         editor.putInt("die1", die1);
         editor.putInt("die2", die2);
         editor.apply();
-
-        System.out.println("Saved values are: " + die1 + " " + die2);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        System.out.println("Stopped!");
         // We should have teardown code here, the heavy stuff including writing to storage
     }
 
@@ -111,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Set the dice image
-        System.out.println("die is: " + result);
         switch (result) {
             case 1:
                 imgDie.setImageResource(R.drawable.die1);
@@ -190,5 +181,7 @@ public class MainActivity extends AppCompatActivity {
                 txtResult.setText("Result is: " + total);
             }
         });
+
     }
+
 }
