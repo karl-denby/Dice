@@ -3,14 +3,45 @@ package com.karldenby.dice;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.Set;
+
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.lang.NonNull;
+import com.mongodb.stitch.android.core.Stitch;
+import com.mongodb.stitch.android.core.StitchAppClient;
+import com.mongodb.stitch.android.core.auth.StitchUser;
+import com.mongodb.stitch.android.services.mongodb.local.LocalMongoDbService;
+import com.mongodb.stitch.android.services.mongodb.remote.RemoteMongoClient;
+import com.mongodb.stitch.android.services.mongodb.remote.RemoteMongoCollection;
+import com.mongodb.stitch.core.auth.providers.anonymous.AnonymousCredential;
+import com.mongodb.stitch.core.services.mongodb.remote.RemoteUpdateOptions;
+import com.mongodb.stitch.core.services.mongodb.remote.sync.ChangeEventListener;
+import com.mongodb.stitch.core.services.mongodb.remote.sync.DefaultSyncConflictResolvers;
+import com.mongodb.stitch.core.services.mongodb.remote.sync.ErrorListener;
+import com.mongodb.stitch.core.services.mongodb.remote.sync.internal.ChangeEvent;
+
+import org.bson.BsonString;
+import org.bson.BsonValue;
+import org.bson.Document;
+
+import static com.mongodb.client.model.Filters.eq;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,8 +61,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mongoMobileLocalDatabaseConnection();
+
         // This is an attempt to only create everything once
         if (savedInstanceState == null) {
+            setupWidgets();         // Call our super function that gets us going
             setupWidgets();         // Call our super function that gets us going
             txtResult.setText("Result is: " + total);
 
@@ -48,12 +82,31 @@ public class MainActivity extends AppCompatActivity {
 
         setupWidgets();         // attached activity elements to callbacks
 
-        // Load saved values???
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                getString(R.string.dice_save), Context.MODE_PRIVATE
-        );
-        die1 = sharedPref.getInt("die1", 0);
-        die2 = sharedPref.getInt("die2", 0);
+        mongoMobileLocalDatabaseConnection();
+        // Create the default Stitch Client
+        final StitchAppClient client =
+                Stitch.getDefaultAppClient();
+
+        // Create a Client for MongoDB Mobile (initializing MongoDB Mobile)
+        final MongoClient mobileClient =
+                client.getServiceClient(LocalMongoDbService.clientFactory);
+
+        // Point to the target collection and insert a document
+        MongoCollection<Document> localCollection =
+                mobileClient.getDatabase("mm_db").getCollection("mm_col");
+
+        Document doc = localCollection.find(new Document("_id", 1)).first();
+
+        Log.d("mobile", mobileClient.toString());
+
+
+        if (doc == null) {
+            die1 = 0;
+            die2 = 0;
+        } else {
+            die1 = doc.getInteger("die1");
+            die2 = doc.getInteger("die2");
+        }
 
         // Set dice to saved values or new values if they where blank
         die1 = setupDie(imgDieOne, die1);
@@ -70,20 +123,47 @@ public class MainActivity extends AppCompatActivity {
         // We should have code here that drops usage of things like cameras and sensors
         // Nothing to heavy though as we will still be visible
 
-        // Save the dice values
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                getString(R.string.dice_save), Context.MODE_PRIVATE
-        );
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt("die1", die1);
-        editor.putInt("die2", die2);
-        editor.apply();
+        // Create the default Stitch Client
+        final StitchAppClient client =
+                Stitch.getDefaultAppClient();
+
+        // Create a Client for MongoDB Mobile (initializing MongoDB Mobile)
+        final MongoClient mobileClient =
+                client.getServiceClient(LocalMongoDbService.clientFactory);
+
+        // Point to the target collection and insert a document
+        MongoCollection<Document> localCollection =
+                mobileClient.getDatabase("mm_db").getCollection("mm_col");
+
+        Document document = new Document("_id", 1)
+                .append("die1", die1)
+                .append("die2", die2);
+
+        localCollection.replaceOne(new Document("_id", 1 ), document, new UpdateOptions().upsert(true));
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         // We should have teardown code here, the heavy stuff including writing to storage
+    }
+
+    private void mongoMobileLocalDatabaseConnection() {
+
+        final StitchAppClient client;
+        final MongoClient mobileClient;
+
+        // MongoDB Mobile Local
+        // Create the default Stitch Client
+        if (Stitch.hasAppClient("dice-mgatp")) {
+            client = Stitch.getDefaultAppClient();
+        } else {
+            client = Stitch.initializeDefaultAppClient("dice-mgatp");
+        }
+        mobileClient = client.getServiceClient(LocalMongoDbService.clientFactory);
+
+        Log.d("MongoMobile","Connect Setup");
+        Log.d("MongoMobile", client.toString());
     }
 
     private int setupDie (ImageView imgDie, int DieValue) {
