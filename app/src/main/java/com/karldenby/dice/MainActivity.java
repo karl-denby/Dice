@@ -61,18 +61,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mongoMobileLocalDatabaseConnection();
-
         // This is an attempt to only create everything once
         if (savedInstanceState == null) {
-            setupWidgets();         // Call our super function that gets us going
-            setupWidgets();         // Call our super function that gets us going
-            txtResult.setText("Result is: " + total);
-
+            setupWidgets();
             if (total == 0) {
                 bRoll.callOnClick();    // Roll the dice so we don't start with 0 :)
-                txtResult.setText("Result is: " + total);
             }
+            txtResult.setText(getString(R.string.Result, total));
         }
     }
 
@@ -114,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Calculate total and update txtResult.text
         total = die1 + die2;
-        txtResult.setText("Result is: " + total);
+        txtResult.setText(getString(R.string.Result, total));
     }
 
     @Override
@@ -225,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
                 result = setupDie(imgDieOne, 6);
                 die1 = 6;
                 total = die1 + die2;
-                txtResult.setText("Result is: " + total);
+                txtResult.setText(getString(R.string.Result,result));
 
                 result -= 1;
             }
@@ -240,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
                 result = setupDie(imgDieTwo, 6);
                 die2 = 6;
                 total = die1 + die2;
-                txtResult.setText("Result is: " + total);
+                txtResult.setText(getString(R.string.Result, total));
 
                 result -= 1;
             }
@@ -258,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Calculate total and update txtResult.text
                 total = die1 + die2;
-                txtResult.setText("Result is: " + total);
+                txtResult.setText(getString(R.string.Result, total));
             }
         });
 

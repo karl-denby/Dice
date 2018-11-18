@@ -2,7 +2,7 @@
     <string name="app_name">Dice</string>
 
     <string name="Roll">Roll</string>
-    <string name="Result">Result: ?</string>
+    <string name="Result">Result is: %d</string>
     <string name="leftDie">Left Dice</string>
     <string name="rightDie">Right Dice</string>
     <string name="dice_save">dice_save</string>
