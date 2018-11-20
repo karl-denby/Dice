@@ -4,25 +4,21 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.stitch.android.core.Stitch;
 import com.mongodb.stitch.android.core.StitchAppClient;
 import com.mongodb.stitch.android.services.mongodb.local.LocalMongoDbService;
 
 import java.util.Random;
 import org.bson.Document;
-import org.bson.types.ObjectId;
 
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Updates.combine;
-import static com.mongodb.client.model.Updates.currentDate;
 import static com.mongodb.client.model.Updates.set;
 
 
@@ -74,6 +70,11 @@ public class MainActivity extends AppCompatActivity {
                 mobileClient.getDatabase("mm_db").getCollection("mm_col");
         Document doc = localCollection.find(new Document("_id", 1)).first();
         Log.d("mobile", mobileClient.toString());
+
+        if (doc == null) {
+            localCollection.insertOne(new Document("_id", 1));
+            Log.v("mobile", "Create initial document");
+        }
 
         // -----------------------------------------------------------------------------------------
 
@@ -158,7 +159,6 @@ public class MainActivity extends AppCompatActivity {
                 imgDie.setImageResource(R.drawable.die6);
                 break;
         }
-
         return result;
     }
 
